@@ -1,6 +1,11 @@
 from sys import argv
+from task1 import findmostQueens
+from task2 import findmostBishops
 
 print(argv)
+def printboard(board):
+    for row in board:
+        print(row)
 
 if __name__ == "__main__":
     task = 0
@@ -15,12 +20,18 @@ if __name__ == "__main__":
             task = int(lines[0])
             m, n = int(lines[1]), int(lines[2])
     print(task, m, n)
+    if m < 0 or n < 0 :
+        raise ValueError("Invalid input")
+    # board = [[0]*n for _ in range(m)]
     match(task):
         # Task 1: Find most Queens
         case 1:
+            board = findmostQueens(m, n)
+            printboard(board)
             pass
         # Task 2: Find most Bishops
         case 2:
+            board = findmostBishops(m, n)
             pass
         # Task 3: Find most Knights
         case 3:
