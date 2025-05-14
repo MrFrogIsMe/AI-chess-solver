@@ -32,6 +32,7 @@ if __name__ == "__main__":
         # Task 2: Find most Bishops
         case 2:
             board = findmostBishops(m, n)
+            printboard(board)
             pass
         # Task 3: Find most Knights
         case 3:
