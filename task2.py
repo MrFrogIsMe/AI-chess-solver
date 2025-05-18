@@ -1,12 +1,16 @@
 def findmostBishops(m, n):
     board = [[0]*n for _ in range(m)]
-    if m <= n: 
-        board[0] = [1] * n
+    if m <= n:
+        for i in range (0, n, m):
+            for j in range (m):
+                board[j][i] = 1
     else:
-        for row in range(m): board[row][0] = 1
+        for i in range (0, m, n):
+            for j in range (n):
+                board[i][j] = 1
+    
     if m == n:
-        for col in range(1, n-1): board[m-1][col] = 1
-    # for row in range(m):
-    #     print(board[row])
+        for i in range (1, n-1): board[i][m-1] = 1
+    for i in range (m): print(board[i])
     return board
-# findmostBishops(4, 5)
+findmostBishops(6, 6)
