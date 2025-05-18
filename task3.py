@@ -19,7 +19,6 @@ def findmostKnights(m, n):
             start_col = 0 if i % 2 == 0 else 1
             for j in range (start_col, n, 2):
                 board[i][j] = 1
-    for i in range (m): print(board[i])
+    # for i in range (m): print(board[i])
     return board
-
-findmostKnights(8, 3)
+# findmostKnights(9, 2)
