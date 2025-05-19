@@ -1,6 +1,5 @@
 from sys import argv
 from task1 import findmostQueens
-from task2 import findmostBishops
 
 print(argv)
 def printboard(board):
@@ -31,7 +30,6 @@ if __name__ == "__main__":
             pass
         # Task 2: Find most Bishops
         case 2:
-            board = findmostBishops(m, n)
             pass
         # Task 3: Find most Knights
         case 3:
