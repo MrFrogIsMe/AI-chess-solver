@@ -1,7 +1,7 @@
-def is_safe(board, row, col, n, m):
-    for i in range(n):
-        if board[i][col] == 1: return False
+def is_safe(board, row, col, m, n):
     for i in range(m):
+        if board[i][col] == 1: return False
+    for i in range(n):
         if board[row][i] == 1: return False
     i, j = row - 1, col - 1
     while i >= 0 and j >= 0:
@@ -15,18 +15,18 @@ def is_safe(board, row, col, n, m):
         j += 1
     return True
 
-def dfs(board, row, n, m):
-    if row == n: 
+def dfs(board, row, m, n):
+    if row == min(m, n):
         return board
     for col in range(n):
-        if is_safe(board, row, col, n, m):
+        if is_safe(board, row, col, m, n):
             board[row][col] = 1
-            result = dfs(board, row+1, n, m)
+            result = dfs(board, row+1, m, n)
             if result: return result
             board[row][col] = 0
     return None
 
 def findmostQueens(m, n):
     board = [[0]*n for _ in range(m)]
-    result = dfs(board, 0, n, m)
+    result = dfs(board, 0, m, n)
     return result
