@@ -14,6 +14,7 @@ def is_safe(board, row, col, n, m):
         i -= 1
         j += 1
     return True
+
 def dfs(board, row, n, m):
     if row == n: 
         return board
@@ -24,8 +25,8 @@ def dfs(board, row, n, m):
             if result: return result
             board[row][col] = 0
     return None
+
 def findmostQueens(m, n):
     board = [[0]*n for _ in range(m)]
     result = dfs(board, 0, n, m)
     return result
-# findmostQueens(4, 4)
