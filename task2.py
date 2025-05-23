@@ -11,6 +11,5 @@ def findmostBishops(m, n):
     
     if m == n:
         for i in range (1, n-1): board[i][m-1] = 1
-    for i in range (m): print(board[i])
+    # for i in range (m): print(board[i])
     return board
-findmostBishops(6, 6)
