@@ -1,6 +1,10 @@
 from sys import argv
+from task4 import findMostBishopsAndKnights
 
 print(argv)
+def printboard(board):
+    for row in board:
+        print(row)
 
 if __name__ == "__main__":
     task = 0
@@ -27,7 +31,8 @@ if __name__ == "__main__":
             pass
         # Task 4: Find most Bishops and Knights
         case 4:
-            pass
+            board = findMostBishopsAndKnights(m, n)
+            printboard(board)
         # Task 5: Find most Bishops and Knights with a given Queens
         case 5:
             pass
