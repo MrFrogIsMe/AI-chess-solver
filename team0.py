@@ -31,7 +31,8 @@ if __name__ == "__main__":
             pass
         # Task 4: Find most Bishops and Knights
         case 4:
-            board = findMostBishopsAndKnights(m, n)
+            board = findMostBishopsAndKnights(m ,n)
+            # boardKnights, boardBishops = findMostBishopsAndKnights(m, n)
             printboard(board)
         # Task 5: Find most Bishops and Knights with a given Queens
         case 5:
