@@ -1,5 +1,5 @@
 from sys import argv
-
+from task5 import findMostBishopsAndKnightswithQueens
 print(argv)
 
 if __name__ == "__main__":
@@ -30,6 +30,7 @@ if __name__ == "__main__":
             pass
         # Task 5: Find most Bishops and Knights with a given Queens
         case 5:
+            findMostBishopsAndKnightswithQueens(m, n)
             pass
         case _:
             raise ValueError("Invalid task number")
