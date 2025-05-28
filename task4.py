@@ -21,7 +21,11 @@ def findmostKnights(m, n):
                 board[i][j] = 1
     # for i in range (m): print(board[i])
     return board
-
+def ClearKnights(board, m, n, row, col):
+    KnightsMove = [(2, 1), (2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2), (-2, 1), (-2, -1)]
+    for dr, dc in KnightsMove:
+        nr, nc = row + dr, col + dc 
+        if 0 <= nr < m and 0 <= nc < n: board[nr][nc] = 0
 def replaceKnightswithBishops(board, m, n, Nreplace):
     if m < n:
         for col in range(n):
@@ -29,29 +33,14 @@ def replaceKnightswithBishops(board, m, n, Nreplace):
                 if Nreplace == 0: return board
                 board[row][col] = 2
                 Nreplace -= 1
-                if row -2 >= 0 and col - 1 >= 0 : board[row-2][col-1] = 0
-                if row -2 >= 0 and col + 1 < n : board[row-2][col+1] = 0
-                if row -1 >= 0 and col - 2 >= 0 : board[row-1][col-2] = 0
-                if row -1 >= 0 and col + 2 < n : board[row-1][col+2] = 0
-                if row +1 < m and col - 2 >= 0 : board[row+1][col-2] = 0
-                if row +1 < m and col + 2 < n : board[row+1][col+2] = 0
-                if row +2 < m and col - 1 >= 0 : board[row+2][col-1] = 0
-                if row +2 < m and col + 1 < n : board[row+2][col+1] = 0
+                ClearKnights(board, m, n, row, col)
     else:
         for row in range (m):
             for col in range(1, n, 2):
                 if Nreplace == 0: return board
                 board[row][col] = 2
                 Nreplace -= 1
-                if row -2 >= 0 and col - 1 >= 0 : board[row-2][col-1] = 0
-                if row -2 >= 0 and col + 1 < n : board[row-2][col+1] = 0
-                if row -1 >= 0 and col - 2 >= 0 : board[row-1][col-2] = 0
-                if row -1 >= 0 and col + 2 < n : board[row-1][col+2] = 0
-                if row +1 < m and col - 2 >= 0 : board[row+1][col-2] = 0
-                if row +1 < m and col + 2 < n : board[row+1][col+2] = 0
-                if row +2 < m and col - 1 >= 0 : board[row+2][col-1] = 0
-                if row +2 < m and col + 1 < n : board[row+2][col+1] = 0             
-            
+                ClearKnights(board, m, n, row, col)
 def findMostBishopsAndKnights(m, n):
     board = [[0] * n for _ in range(m)]
     board = findmostKnights(m, n)

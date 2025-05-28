@@ -19,7 +19,7 @@ if __name__ == "__main__":
             task = int(lines[0])
             m, n = int(lines[1]), int(lines[2])
     print(task, m, n)
-    match(task):
+    match(task):  
         # Task 1: Find most Queens
         case 1:
             pass
