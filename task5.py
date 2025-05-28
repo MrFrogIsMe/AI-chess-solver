@@ -1,0 +1,1 @@
+def indMostBishopsAndKnightswithQueens(m, n, QueensPos):

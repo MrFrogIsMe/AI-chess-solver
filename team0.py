@@ -8,13 +8,20 @@ if __name__ == "__main__":
     if len(argv) > 1:
         task = int(argv[1].strip(','))
         m, n = int(argv[2].strip(',')), int(argv[3].strip(','))
+        if task == 5 and len(argv) > 4:
+            queens_str = ' '.join(argv[4:])
+            QueensPos = eval(queens_str)
     else: 
         with open('input.txt', 'r') as f:
             lines = f.readline().strip().split(',')
             print(lines)
             task = int(lines[0])
             m, n = int(lines[1]), int(lines[2])
+            if task == 5 and len(lines) > 3:
+                queens_str = ','.join(lines[3:]).strip()
+                QueensPos = eval(queens_str)
     print(task, m, n)
+    print(QueensPos)
     match(task):
         # Task 1: Find most Queens
         case 1:
@@ -30,7 +37,7 @@ if __name__ == "__main__":
             pass
         # Task 5: Find most Bishops and Knights with a given Queens
         case 5:
-            findMostBishopsAndKnightswithQueens(m, n)
+            findMostBishopsAndKnightswithQueens(m, n, QueensPos)
             pass
         case _:
             raise ValueError("Invalid task number")
