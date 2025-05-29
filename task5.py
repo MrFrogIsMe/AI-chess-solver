@@ -74,8 +74,7 @@ def findMostBishopsAndKnightswithQueens(m, n, QueensPos):
     board = placeKnights(board, m, n, NmainDiagonal >= NantiDiagonal)
     # place bishops
     board = placeBishops(board, m, n)
-    for i in range(m): print(board[i])
+    # for i in range(m): print(board[i])
     return board
-
-findMostBishopsAndKnightswithQueens(4, 6, [(0, 0), (2, 3)])
+# findMostBishopsAndKnightswithQueens(4, 6, [(0, 0), (2, 3)])
     
