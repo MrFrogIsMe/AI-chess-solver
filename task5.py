@@ -34,7 +34,7 @@ def placeBishops(board, m, n):
                 for d in range(1, max(m, n)):
                     for dr, dc in [(-d, -d), (-d, d), (d, -d), (d, d)]:
                         r, c = i + dr, j + dc
-                        if 0 <= r < m and 0 <= c < n and board[r][c] == 2: NKnightsonLine += 1
+                        if 0 <= r < m and 0 <= c < n and (board[r][c] == 2 or board[r][c] == 3): NKnightsonLine += 1
                 if NKnightsonLine == 0: board[i][j] = 3
                 if NKnightsonLine < minNKnightsonLine:
                     minNKnightsonLine = NKnightsonLine
@@ -50,7 +50,7 @@ def findMostBishopsAndKnightswithQueens(m, n, QueensPos):
     # queens = 1, Knights = 2, Bishops = 3, can't put -1
     board = [[0] * n for _ in range(m)]
     # place queens
-    for qr, qc in QueensPos:
+    for qc, qr in QueensPos:
         if qr < 0 or qr >= m or qc < 0 or qc >= n:
             print("Invalid Queen position")
             return
