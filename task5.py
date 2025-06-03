@@ -29,11 +29,12 @@ def placeBishops(board, m, n):
     for i in range(m):
         for j in range(n):
             if board[i][j] != 1 and board[i][j] != -1:
+                # check whether there is knights on bishop's line
                 NKnightsonLine = 0
                 for d in range(1, max(m, n)):
                     for dr, dc in [(-d, -d), (-d, d), (d, -d), (d, d)]:
                         r, c = i + dr, j + dc
-                        if 0 <= r < m and 0 <= c < n: NKnightsonLine += 1
+                        if 0 <= r < m and 0 <= c < n and board[r][c] == 2: NKnightsonLine += 1
                 if NKnightsonLine == 0: board[i][j] = 3
                 if NKnightsonLine < minNKnightsonLine:
                     minNKnightsonLine = NKnightsonLine
@@ -74,7 +75,6 @@ def findMostBishopsAndKnightswithQueens(m, n, QueensPos):
     board = placeKnights(board, m, n, NmainDiagonal >= NantiDiagonal)
     # place bishops
     board = placeBishops(board, m, n)
-    # for i in range(m): print(board[i])
+    for i in range(m): print(board[i])
     return board
-# findMostBishopsAndKnightswithQueens(4, 6, [(0, 0), (2, 3)])
-    
+findMostBishopsAndKnightswithQueens(4, 6, [(0, 0), (2, 3)])
