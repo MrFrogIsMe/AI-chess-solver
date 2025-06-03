@@ -1,3 +1,4 @@
+# from task3 import findmostKnights
 def findmostKnights(m, n):
     board = [[0]*n for _ in range(m)]
     if m == 1:
