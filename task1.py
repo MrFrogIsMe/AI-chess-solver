@@ -32,7 +32,7 @@ def dfs(board, idx, m, n, by_row):
             attacked[3].remove(row - col)
     return None
 
-def findmostQueens(m, n):
+def findmostQueens(n, m):
     board = [[0]*n for _ in range(m)]
     by_row = m <= n
     result = dfs(board, 0, m, n, by_row)
