@@ -3,9 +3,11 @@ from task1 import findmostQueens
 from task2 import findmostBishops
 
 print(argv)
-def printboard(board):
+def printboard(board, count=None):
     for row in board:
         print(*row)
+    if count is not None:
+        print(count)
 
 if __name__ == "__main__":
     task = 0
@@ -31,8 +33,8 @@ if __name__ == "__main__":
             pass
         # Task 2: Find most Bishops
         case 2:
-            board = findmostBishops(m, n)
-            printboard(board)
+            board, count = findmostBishops(m, n)
+            printboard(board, count)
             pass
         # Task 3: Find most Knights
         case 3:

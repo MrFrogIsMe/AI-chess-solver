@@ -1,11 +1,12 @@
 import random
 
 def findmostBishops(m, n):
-    return find_most_bishops_ori(m, n)
+    # return find_most_bishops_ori(m, n)
     # return find_most_bishops_dfs(m, n)
-    return find_most_bishops_hill_climbing(m, n)
+    # return find_most_bishops_hill_climbing(m, n)
     # return find_most_bishops_random_restart_hill_climbing(m, n)
-    return find_most_bishops_simulated_annealing(m, n)
+    # return find_most_bishops_simulated_annealing(m, n)
+    return find_most_bishops_genetic(m, n)
 
 def find_most_bishops_ori(m, n):
     board = [[0]*n for _ in range(m)]
@@ -22,7 +23,8 @@ def find_most_bishops_ori(m, n):
         for i in range (1, n-1): board[i][m-1] = 1
     # for i in range (m): print(board[i])
     print(f"find_most_bishops_ori: {sum(sum(row) for row in board)}")
-    return board
+    count = sum(sum(row) for row in board)
+    return board, count
 
 
 def find_most_bishops_dfs(m, n):
@@ -74,8 +76,12 @@ def find_most_bishops_dfs(m, n):
         # dfs(pos + 1, num_bishops)
 
     dfs(0, 0)
-    print(f"最大num_bishops: {max_found}")
-    return best_board if best_board else board
+    if best_board:
+        board = best_board
+    else:
+        board = board
+    count = sum(row.count('B') for row in board)
+    return board, count
 
 def find_most_bishops_hill_climbing(m, n, max_steps=1000):
     def is_valid(board, x, y):
@@ -111,7 +117,8 @@ def find_most_bishops_hill_climbing(m, n, max_steps=1000):
         if not improved:
             break
     print(f"hill climbing 最大num_bishops: {best_count}")
-    return best
+    count = sum(row.count('B') for row in best)
+    return best, count
 
 def find_most_bishops_random_restart_hill_climbing(m, n, restarts=20, max_steps=1000):
     def is_valid(board, x, y):
@@ -151,7 +158,8 @@ def find_most_bishops_random_restart_hill_climbing(m, n, restarts=20, max_steps=
             best_count = count
             best_overall = [r[:] for r in best]
     print(f"random restart hill climbing 最大num_bishops: {best_count}")
-    return best_overall
+    count = sum(row.count('B') for row in best_overall) if best_overall else 0
+    return best_overall, count
 
 def find_most_bishops_simulated_annealing(m, n, max_steps=10000, start_temp=10.0, end_temp=0.01, cooling_rate=0.995):
     import math
@@ -218,4 +226,103 @@ def find_most_bishops_simulated_annealing(m, n, max_steps=10000, start_temp=10.0
         if temp < end_temp:
             break
     print(f"simulated annealing 最大num_bishops: {best_count}")
-    return best
+    count = sum(row.count('B') for row in best)
+    return best, count
+
+def find_most_bishops_genetic(m, n, population_size=50, generations=200, mutation_rate=0.1, elite_ratio=0.2):
+    import random
+    def is_valid(board, x, y):
+        dirs = [(-1,-1), (-1,1), (1,-1), (1,1)]
+        for dx, dy in dirs:
+            i, j = x+dx, y+dy
+            while 0 <= i < m and 0 <= j < n:
+                if board[i][j] == 'B':
+                    return False
+                i += dx
+                j += dy
+        return True
+
+    def board_fitness(board):
+        # 合法bishop數量，不合法則懲罰
+        count = 0
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'B' and is_valid(board, i, j):
+                    count += 1
+                elif board[i][j] == 'B':
+                    return -1000  # 不合法懲罰
+        return count
+
+    def random_board():
+        board = [['.']*n for _ in range(m)]
+        for _ in range(random.randint(0, m*n)):
+            i, j = random.randint(0, m-1), random.randint(0, n-1)
+            if board[i][j] == '.' and is_valid(board, i, j):
+                board[i][j] = 'B'
+        return board
+
+    def crossover(parent1, parent2):
+        # 單點交配
+        cut = random.randint(0, m*n-1)
+        child = [['.']*n for _ in range(m)]
+        for idx in range(m*n):
+            i, j = divmod(idx, n)
+            if idx < cut:
+                child[i][j] = parent1[i][j]
+            else:
+                child[i][j] = parent2[i][j]
+        return child
+
+    def mutate(board):
+        # 隨機加/移除/移動 bishop
+        b = [r[:] for r in board]
+        action = random.choice(['add', 'remove', 'move'])
+        if action == 'add':
+            empties = [(i, j) for i in range(m) for j in range(n) if b[i][j] == '.']
+            if empties:
+                i, j = random.choice(empties)
+                if is_valid(b, i, j):
+                    b[i][j] = 'B'
+        elif action == 'remove':
+            bishops = [(i, j) for i in range(m) for j in range(n) if b[i][j] == 'B']
+            if bishops:
+                i, j = random.choice(bishops)
+                b[i][j] = '.'
+        else:  # move
+            bishops = [(i, j) for i in range(m) for j in range(n) if b[i][j] == 'B']
+            empties = [(i, j) for i in range(m) for j in range(n) if b[i][j] == '.']
+            if bishops and empties:
+                bi, bj = random.choice(bishops)
+                ei, ej = random.choice(empties)
+                b[bi][bj] = '.'
+                if is_valid(b, ei, ej):
+                    b[ei][ej] = 'B'
+                else:
+                    b[bi][bj] = 'B'
+        return b
+
+    # 初始化族群
+    population = [random_board() for _ in range(population_size)]
+    best = None
+    best_score = -1000
+
+    for gen in range(generations):
+        scored = [(board_fitness(b), b) for b in population]
+        scored.sort(reverse=True, key=lambda x: x[0])
+        if scored[0][0] > best_score:
+            best_score = scored[0][0]
+            best = [r[:] for r in scored[0][1]]
+        # 精英保留
+        elite_n = max(1, int(elite_ratio * population_size))
+        new_population = [scored[i][1] for i in range(elite_n)]
+        # 交配產生新個體
+        while len(new_population) < population_size:
+            p1, p2 = random.choices(new_population, k=2)
+            child = crossover(p1, p2)
+            if random.random() < mutation_rate:
+                child = mutate(child)
+            new_population.append(child)
+        population = new_population
+    print(f"genetic algorithm 最大num_bishops: {best_score}")
+    count = sum(row.count('B') for row in best) if best else 0
+    return best, count
