@@ -57,26 +57,17 @@ def find_most_bishops_hill_climbing(m, n, max_steps=1000, alpha=10):
         # 可能的行動：加、移除、移動 bishop
         for i in range(m):
             for j in range(n):
-                if board[i][j] == '.' and attack_cnt[i][j] == 0:
-                    new_board = [r[:] for r in board]
-                    new_attack_cnt = [row[:] for row in attack_cnt]
-                    new_board[i][j] = 'B'
-                    update_attack_cnt(new_attack_cnt, i, j, 1)
-                    neighbors.append((new_board, new_attack_cnt))
-        for i in range(m):
-            for j in range(n):
-                if board[i][j] == 'B':
-                    new_board = [r[:] for r in board]
-                    new_attack_cnt = [row[:] for row in attack_cnt]
-                    new_board[i][j] = '.'
-                    update_attack_cnt(new_attack_cnt, i, j, -1)
-                    neighbors.append((new_board, new_attack_cnt))
+                new_board = [r[:] for r in board]
+                new_attack_cnt = [row[:] for row in attack_cnt]
+                new_board[i][j] = ('B', '.')[new_board[i][j] == 'B']  # 切換 B 和 .
+                update_attack_cnt(new_attack_cnt, i, j, (-1, 1)[new_board[i][j] == 'B'])
+                neighbors.append((new_board, new_attack_cnt))
         for i in range(m):
             for j in range(n):
                 if board[i][j] == 'B':
                     for x in range(m):
                         for y in range(n):
-                            if board[x][y] == '.' and attack_cnt[x][y] == 0 and (x != i or y != j):
+                            if board[x][y] == '.' and (x != i or y != j):
                                 new_board = [r[:] for r in board]
                                 new_attack_cnt = [row[:] for row in attack_cnt]
                                 new_board[i][j] = '.'
@@ -86,7 +77,11 @@ def find_most_bishops_hill_climbing(m, n, max_steps=1000, alpha=10):
                                 neighbors.append((new_board, new_attack_cnt))
         neighbor_costs = [(cost(nb, ac), nb, ac) for nb, ac in neighbors]
         neighbor_costs.sort(key=lambda x: x[0])
-        print(f"Step {step+1}: current cost={curr_cost}, best cost={best_cost}, neighbors found={len(neighbor_costs)}")
+        # print(f"Step {step+1}: current cost={curr_cost}, best cost={best_cost}, neighbors found={len(neighbor_costs)}")
+        # for state in neighbors:
+        #     for b in state[0]:
+        #         print(' '.join(b))
+        #     print()
         if neighbor_costs and neighbor_costs[0][0] < curr_cost:
             curr_cost, board, attack_cnt = neighbor_costs[0]
             if curr_cost < best_cost:
