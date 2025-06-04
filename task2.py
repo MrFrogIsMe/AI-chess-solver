@@ -3,7 +3,7 @@ import random
 def findmostBishops(m, n):
     return find_most_bishops_hill_climbing(m, n)
 
-def find_most_bishops_hill_climbing(m, n, max_steps=1000, alpha=10):
+def find_most_bishops_hill_climbing(m, n, max_steps=100000, alpha=10, k=10):
     # 新增：維護 attack_cnt
     def init_attack_cnt(board):
         attack_cnt = [[0]*n for _ in range(m)]
@@ -40,6 +40,19 @@ def find_most_bishops_hill_climbing(m, n, max_steps=1000, alpha=10):
                     safe_count += 1
         # print(f"cost: num_bishops={num_bishops}, conflict={conflict}, safe_count={safe_count}")
         return -num_bishops + alpha * conflict + safe_count  # safe_count 權重可再調整
+
+    def is_valid_board(board):
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'B':
+                    for dx, dy in [(-1,-1), (-1,1), (1,-1), (1,1)]:
+                        x, y = i + dx, j + dy
+                        while 0 <= x < m and 0 <= y < n:
+                            if board[x][y] == 'B':
+                                return False
+                            x += dx
+                            y += dy
+        return True
 
     # 隨機產生初始解（可放一些 bishop）
     board = [['.']*n for _ in range(m)]
@@ -88,7 +101,7 @@ def find_most_bishops_hill_climbing(m, n, max_steps=1000, alpha=10):
                 best_cost = curr_cost
                 best = [r[:] for r in board]
                 best_attack_cnt = [row[:] for row in attack_cnt]
-        else:
+        elif is_valid_board(best):
             break
     # cost = -bishop數量 + alpha*conflict，所以答案是 -best_cost 當conflict=0時
     num_bishops = sum(row.count('B') for row in best)

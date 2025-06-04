@@ -1,5 +1,6 @@
 from sys import argv
 import task2
+from team0 import printboard
 import time
 
 # calculate the average number of bishops placed on the board
@@ -15,6 +16,8 @@ def validate_bishops(m, n, runs=20):
         print(f"{count} bishops placed, ", end="")
         print(f"mean: {sum(total_bishops) / len(total_bishops):.2f}, ", end="")
         print(f"time: {elapsed:.4f}s")
+        # print("Board:")
+        # printboard(board, count)
     average_bishops = sum(total_bishops) / runs
     print(f"Average number of bishops placed on a {m}x{n} board: {average_bishops}")
     # print max and min bishops placed
