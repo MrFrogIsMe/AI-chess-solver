@@ -1,6 +1,5 @@
 import random
 
-
 def find_most_queens_hill_climbing(m, n, max_steps=1000, alpha=10):
     # 新增：維護 attack_cnt
     def init_attack_cnt(board):
