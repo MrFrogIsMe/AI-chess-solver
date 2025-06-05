@@ -5,7 +5,7 @@ bishop_moves = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
 knight_moves = [(-1, -2), (-1, 2), (1, -2), (1, 2), (-2, -1), (-2, 1), (2, -1), (2, 1)]
 
 def find_most_bishops_and_knights(m, n):
-    return find_most_bishops_and_knights_simulated_annealing(m, n)
+    return find_most_bishops_and_knights_simulated_annealing(m, n, alpha=30, beta=30)
 
 def find_most_bishops_and_knights_simulated_annealing(m, n, max_steps=100000, alpha=10, beta=10, start_temp=10.0, end_temp=0.01, cooling_rate=0.995):
     def is_valid_board(board):
@@ -33,18 +33,18 @@ def find_most_bishops_and_knights_simulated_annealing(m, n, max_steps=100000, al
         for i in range(m):
             for j in range(n):
                 if board[i][j] != '.':
-                    update_attack_cnt(attack_cnt, i, j, 1)
+                    update_attack_cnt(attack_cnt, i, j, 1, board[i][j])
         return attack_cnt
 
-    def update_attack_cnt(attack_cnt, i, j, delta):
-        if board[i][j] == 'B':
+    def update_attack_cnt(attack_cnt, i, j, delta, piece):
+        if piece == 'B':
             for dx, dy in bishop_moves:
                 x, y = i + dx, j + dy
                 while 0 <= x < m and 0 <= y < n:
                     attack_cnt[x][y] += delta
                     x += dx
                     y += dy
-        elif board[i][j] == 'K':
+        elif piece == 'K':
             for dx, dy in knight_moves:
                 x, y = i + dx, j + dy
                 if 0 <= x < m and 0 <= y < n:
@@ -91,38 +91,50 @@ def find_most_bishops_and_knights_simulated_annealing(m, n, max_steps=100000, al
                     bishops.append((i, j))
                 elif board[i][j] == 'K':
                     knights.append((i, j))
-        # 根據棋盤大小動態調整三種行動的權重
-        total = len(empties) + len(bishops)
-        # weights = [m * n / total, 1 / total, 1 / total]  # [move, add, remove]
-        weights = [1, 1, 1]  # [move, add, remove]
-        action_type = random.choices(['move', 'add', 'remove'], weights=weights)[0]
-        if action_type == 'add':
-            if empties:
-                i, j = random.choice(empties)
+        for i in range(m):
+            for j in range(n):
                 new_board = [r[:] for r in board]
                 new_attack_cnt = [row[:] for row in attack_cnt]
-                new_board[i][j] = random.choice(['B', 'K'])
-                update_attack_cnt(new_attack_cnt, i, j, 1)
-                neighbors.append((new_board, new_attack_cnt))
-        elif action_type == 'remove':
-            if bishops or knights:
-                from_i, from_j = random.choice(bishops + knights)
-                new_board = [r[:] for r in board]
-                new_attack_cnt = [row[:] for row in attack_cnt]
-                new_board[from_i][from_j] = '.'
-                update_attack_cnt(new_attack_cnt, from_i, from_j, -1)
-                neighbors.append((new_board, new_attack_cnt))
-        elif action_type == 'move':
-            if (bishops and empties) or (knights and empties):
-                from_i, from_j = random.choice(bishops + knights)
-                to_i, to_j = random.choice(empties)
-                new_board = [r[:] for r in board]
-                new_attack_cnt = [row[:] for row in attack_cnt]
-                new_board[from_i][from_j] = '.'
-                update_attack_cnt(new_attack_cnt, from_i, from_j, -1)
-                new_board[to_i][to_j] = board[from_i][from_j]
-                update_attack_cnt(new_attack_cnt, to_i, to_j, 1)
-                neighbors.append((new_board, new_attack_cnt))
+                if new_board[i][j] == '.':
+                    piece = random.choice(['B', 'K'])
+                    new_board[i][j] = piece
+                    update_attack_cnt(new_attack_cnt, i, j, 1, piece)
+                    neighbors.append((new_board, new_attack_cnt))
+                elif new_board[i][j] == 'B':
+                    piece = 'B'
+                    new_board[i][j] = '.'
+                    update_attack_cnt(new_attack_cnt, i, j, -1, piece)
+                    neighbors.append((new_board, new_attack_cnt))
+                elif new_board[i][j] == 'K':
+                    piece = 'K'
+                    new_board[i][j] = '.'
+                    update_attack_cnt(new_attack_cnt, i, j, -1, piece)
+                    neighbors.append((new_board, new_attack_cnt))
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'B':
+                    for x in range(m):
+                        for y in range(n):
+                            if board[x][y] == '.' and (x != i or y != j):
+                                new_board = [r[:] for r in board]
+                                new_attack_cnt = [row[:] for row in attack_cnt]
+                                new_board[i][j] = '.'
+                                update_attack_cnt(new_attack_cnt, i, j, -1, 'B')
+                                new_board[x][y] = 'B'
+                                update_attack_cnt(new_attack_cnt, x, y, 1, 'B')
+                                neighbors.append((new_board, new_attack_cnt))
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'K':
+                    for x, y in empties:
+                        if (x != i or y != j):
+                            new_board = [r[:] for r in board]
+                            new_attack_cnt = [row[:] for row in attack_cnt]
+                            new_board[i][j] = '.'
+                            update_attack_cnt(new_attack_cnt, i, j, -1, 'K')
+                            new_board[x][y] = 'K'
+                            update_attack_cnt(new_attack_cnt, x, y, 1, 'K')
+                            neighbors.append((new_board, new_attack_cnt))
         if not neighbors:
             print("No valid neighbors found, stopping.")
             break
@@ -140,6 +152,12 @@ def find_most_bishops_and_knights_simulated_annealing(m, n, max_steps=100000, al
                 # best_attack_cnt = [row[:] for row in attack_cnt]
         temp *= cooling_rate
         print(f"Step {step+1}, Current Cost: {curr_cost}, Best Cost: {best_cost}, Temperature: {temp:.4f}")
-        if temp < end_temp and is_valid_board(best):
-            break
+        # print(f"Current Board:")
+        # for row in board:
+        #     print(*row)
+        if temp < end_temp:
+            if is_valid_board(best):
+                break
+            else:
+                temp = start_temp  # Reset temperature if no valid board found
     return best
