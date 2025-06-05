@@ -1,6 +1,12 @@
 from sys import argv
 
-print(argv)
+def print_board(board):
+    for row in board:
+        print(*row)
+    bishops = sum(row.count('B') for row in board)
+    knights = sum(row.count('K') for row in board)
+    queens = sum(row.count('Q') for row in board)
+    print(f"Bishops: {bishops}, Knights: {knights}, Queens: {queens}")
 
 if __name__ == "__main__":
     task = 0
@@ -11,10 +17,8 @@ if __name__ == "__main__":
     else: 
         with open('input.txt', 'r') as f:
             lines = f.readline().strip().split(',')
-            print(lines)
             task = int(lines[0])
             m, n = int(lines[1]), int(lines[2])
-    print(task, m, n)
     match(task):
         # Task 1: Find most Queens
         case 1:
