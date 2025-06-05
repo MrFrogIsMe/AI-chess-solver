@@ -1,5 +1,5 @@
-from task1_dfs import dfs
-
+from task1_dfs import find_most_queens_dfs
+from task1_hill_climbing import find_most_queens_hill_climbing
 # def random_restart_hill_climbing(m, n):
 #     best = None
 #     max_queens = 0
@@ -79,9 +79,10 @@ from task1_dfs import dfs
 #     return remove_conflicts(board)
 
 
-def findmostQueens(m, n):
+def find_most_queens(m, n):
     print("m = ", m, "n = ", n)
-    board, count = dfs(m, n)
+    # board, count = dfs(m, n)
+    board, count = find_most_queens_hill_climbing(m, n)
     # board = [[0]*n for _ in range(m)]
     # return dfs(board, 0, m, n, m <= n)
     # result, count = hill_climbing(board, m, n)
@@ -89,5 +90,3 @@ def findmostQueens(m, n):
     # result, count = simulated_annealing(m, n)
     for row in board: print(row)
     print(count)
-
-findmostQueens(3, 8)

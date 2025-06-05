@@ -1,9 +1,7 @@
 import random
 
-def findmostQueens(m, n):
-    return find_most_Queens_hill_climbing(m, n)
 
-def find_most_Queens_hill_climbing(m, n, max_steps=1000, alpha=10):
+def find_most_queens_hill_climbing(m, n, max_steps=1000, alpha=10):
     # 新增：維護 attack_cnt
     def init_attack_cnt(board):
         attack_cnt = [[0]*n for _ in range(m)]
@@ -93,5 +91,5 @@ def find_most_Queens_hill_climbing(m, n, max_steps=1000, alpha=10):
         else:
             break
     # cost = -queens數量 + alpha*conflict，所以答案是 -best_cost 當conflict=0時
-    num_queenss = sum(row.count('B') for row in best)
+    num_queenss = sum(row.count('Q') for row in best)
     return best, num_queenss

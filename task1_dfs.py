@@ -7,7 +7,7 @@ def is_safe(row, col):
     if row - col in attacked[3]: return False   # check anti diagonal
     return True
 
-def dfs_util(board, idx, m, n, by_row):
+def find_most_queens_dfs_util(board, idx, m, n, by_row):
     by_row = m <= n
     limit = m if by_row else n
     if idx == limit: return board
@@ -20,7 +20,7 @@ def dfs_util(board, idx, m, n, by_row):
             attacked[1].add(col)
             attacked[2].add(row + col)
             attacked[3].add(row - col)
-            result = dfs_util(board, idx+1, m, n, by_row)
+            result = find_most_queens_dfs_util(board, idx+1, m, n, by_row)
             if result: return result
             board[row][col] = 0
             attacked[0].remove(row)
@@ -29,8 +29,8 @@ def dfs_util(board, idx, m, n, by_row):
             attacked[3].remove(row - col)
     return None
 
-def dfs(m, n):
+def find_most_queens_dfs(m, n):
     board = [['0']*n for _ in range(m)]
-    board = dfs_util(board, 0, m, n, m <= n)
+    board = find_most_queens_dfs_util(board, 0, m, n, m <= n)
     count = sum(row.count('Q') for row in board)
     return board, count
