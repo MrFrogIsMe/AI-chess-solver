@@ -3,7 +3,7 @@ import random
 bishop_moves = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
 knight_moves = [(-1, -2), (-1, 2), (1, -2), (1, 2), (-2, -1), (-2, 1), (2, -1), (2, 1)]
 
-def find_most_bishops_and_knights_with_queens_hill_climbing(m, n, QueensPos, max_steps=1000, alpha=5):
+def find_most_bishops_and_knights_with_queens_hill_climbing(m, n, QueensPos, max_steps=1000, alpha=10):
     def is_valid_board(board):
         for i in range(m):
             for j in range(n):
@@ -149,12 +149,12 @@ def find_most_bishops_and_knights_with_queens_hill_climbing(m, n, QueensPos, max
         neighbor_costs = [(cost(nb, ac), nb, ac) for nb, ac in neighbors]
         neighbor_costs.sort(key=lambda x: x[0])
         print(f"Step {step+1}: current cost={curr_cost}, best cost={best_cost}, neighbors found={len(neighbor_costs)}")
-        # for row in best:
-        #     print(row)
-        # num_bishops = sum(row.count('B') for row in best)
-        # num_knights = sum(row.count('K') for row in best)
-        # print(f"Bishops: {num_bishops}, Knights: {num_knights}")
-        # print("\n")
+        for row in best:
+            print(row)
+        num_bishops = sum(row.count('B') for row in best)
+        num_knights = sum(row.count('K') for row in best)
+        print(f"Bishops: {num_bishops}, Knights: {num_knights}")
+        print("\n")
         if neighbor_costs and neighbor_costs[0][0] < curr_cost:
             curr_cost, board, attack_cnt = neighbor_costs[0]
             if curr_cost < best_cost:
