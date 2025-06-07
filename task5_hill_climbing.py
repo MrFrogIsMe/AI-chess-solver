@@ -58,9 +58,7 @@ def find_most_bishops_and_knights_with_queens_hill_climbing(m, n, QueensPos, max
             for j in range(n):
                 if board[i][j] == '.' and attack_cnt[i][j] == 0:
                     safe_count += 1
-        # return -num_bishops - num_knights + alpha * conflict - safe_count
-        return -num_bishops - num_knights + alpha * conflict
-        # return - 10 * num_bishops - 8 *num_knights + alpha * conflict + safe_count
+        return - num_bishops - num_knights + alpha * conflict + safe_count
     
     board = [['.'] * n for _ in range(m)]
     # place queens
@@ -98,12 +96,12 @@ def find_most_bishops_and_knights_with_queens_hill_climbing(m, n, QueensPos, max
             for j in range(n):
                 if board[i][j] == '.':
                     empties.append((i, j))
-                elif board[i][j] == 'B':
+                elif board[i][j] == 'B' and attack_cnt[i][j] != 0:
                     bishops.append((i, j))
-                elif board[i][j] == 'K':
+                elif board[i][j] == 'K' and attack_cnt[i][j] != 0:
                     knights.append((i, j))
         
-        # 可能的行動：加、移除、移動 bishop
+        # 可能的行動：加、移除、移動
         for i in range(m):
             for j in range(n):
                 new_board = [r[:] for r in board]
@@ -150,7 +148,7 @@ def find_most_bishops_and_knights_with_queens_hill_climbing(m, n, QueensPos, max
         neighbor_costs.sort(key=lambda x: x[0])
         print(f"Step {step+1}: current cost={curr_cost}, best cost={best_cost}, neighbors found={len(neighbor_costs)}")
         for row in best:
-            print(row)
+            print(*row)
         num_bishops = sum(row.count('B') for row in best)
         num_knights = sum(row.count('K') for row in best)
         print(f"Bishops: {num_bishops}, Knights: {num_knights}")
