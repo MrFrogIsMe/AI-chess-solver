@@ -1,6 +1,6 @@
 from sys import argv
-from task1 import findmostQueens
-from task2 import findmostBishops
+from task1 import find_most_queens
+from task2 import find_most_bishops
 
 print(argv)
 def printboard(board, count=None):
@@ -28,13 +28,18 @@ if __name__ == "__main__":
     match(task):
         # Task 1: Find most Queens
         case 1:
-            board = findmostQueens(m, n)
+            board = find_most_queens(m, n)
             printboard(board)
             pass
         # Task 2: Find most Bishops
         case 2:
+<<<<<<< HEAD
             board, count = findmostBishops(m, n)
             printboard(board, count)
+=======
+            board = find_most_bishops(m, n)
+            printboard(board)
+>>>>>>> task2-hill-climbing
             pass
         # Task 3: Find most Knights
         case 3:
