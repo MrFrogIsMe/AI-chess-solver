@@ -1,4 +1,4 @@
-def find_most_bishops_and_knights(m, n):
-    board = [[0] * n for _ in range(m)]
+from task4_hill_climbing import find_most_bishops_and_knights_hill_climbing
 
-    return board
+def findMostBishopsAndKnights(m, n):
+    return find_most_bishops_and_knights_hill_climbing(m, n)
