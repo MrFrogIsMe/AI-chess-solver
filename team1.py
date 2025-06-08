@@ -3,6 +3,7 @@ from task1 import find_most_queens
 from task2 import find_most_bishops
 from task3 import find_most_knights
 from task4 import find_most_bishops_and_knights
+from task5 import find_most_bishops_and_knights_with_queens
 
 def print_board(board):
     for row in board:
@@ -31,9 +32,13 @@ def printboard(board):
 if __name__ == "__main__":
     task = 0
     m, n = 0, 0
+    QueensPos = []
     if len(argv) > 1:
         task = int(argv[1].strip(','))
         m, n = int(argv[2].strip(',')), int(argv[3].strip(','))
+        if task == 5 and len(argv) > 4:
+            queens_str = ' '.join(argv[4:])
+            QueensPos = eval(queens_str)
     else: 
         with open('input.txt', 'r') as f:
             lines = f.readline().strip().split(',')
@@ -48,23 +53,21 @@ if __name__ == "__main__":
         case 1:
             board = find_most_queens(m, n)
             print_result(board)
-            pass
-        # Task 2: Find most Bishops
         case 2:
             board, count = find_most_bishops(m, n)
             print_result(board)
-            pass
         # Task 3: Find most Knights
         case 3:
             board, knights = find_most_knights(m, n)
             print_result(board)
-            pass
         # Task 4: Find most Bishops and Knights
         case 4:
             board = find_most_bishops_and_knights(m, n)
             print_result(board)
         # Task 5: Find most Bishops and Knights with a given Queens
         case 5:
-            pass
+            # 輸入 Queens Postion 時請記得加上雙引號
+            board, bishops, knights = find_most_bishops_and_knights_with_queens(m, n, QueensPos)
+            print_result(board)
         case _:
             raise ValueError("Invalid task number")
