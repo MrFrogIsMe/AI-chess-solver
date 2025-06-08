@@ -1,6 +1,7 @@
 from sys import argv
 from task1 import find_most_queens
 from task2 import find_most_bishops
+from task4 import find_most_bishops_and_knights
 
 def print_board(board):
     for row in board:
@@ -52,7 +53,8 @@ if __name__ == "__main__":
             pass
         # Task 4: Find most Bishops and Knights
         case 4:
-            pass
+            board = find_most_bishops_and_knights(m, n)
+            print_result(board)
         # Task 5: Find most Bishops and Knights with a given Queens
         case 5:
             pass
