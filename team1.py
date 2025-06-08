@@ -1,9 +1,9 @@
 from sys import argv
-from task1 import find_most_queens
-from task2 import find_most_bishops
-from task3 import find_most_knights
-from task4 import find_most_bishops_and_knights
-from task5 import find_most_bishops_and_knights_with_queens
+from task1.task1 import find_most_queens
+from task2.task2 import find_most_bishops
+from task3.task3 import find_most_knights
+from task4.task4 import find_most_bishops_and_knights
+from task5.task5 import find_most_bishops_and_knights_with_queens
 
 def print_board(board):
     for row in board:
