@@ -4,8 +4,22 @@ import random
 bishop_moves = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
 knight_moves = [(-1, -2), (-1, 2), (1, -2), (1, 2), (-2, -1), (-2, 1), (2, -1), (2, 1)]
 
-def find_most_bishops_and_knights_simulated_annealing(m, n, max_steps=100000, alpha=10, beta=10, start_temp=10.0, end_temp=0.01, cooling_rate=0.995):
-    start_temp = m * n
+def find_most_bishops_and_knights_simulated_annealing(
+    m, n,
+    max_steps=None, alpha=10, beta=10,
+    start_temp=None, end_temp=None, cooling_rate=None
+):
+    # 動態參數調整
+    if start_temp is None or start_temp == -1:
+        start_temp = m * n * 2
+    if end_temp is None or end_temp == -1:
+        end_temp = max(1, m * n * 0.01)
+    if cooling_rate is None:
+        cooling_rate = 0.9995 if m * n > 100 else 0.999
+    if max_steps is None:
+        max_steps = m * n * 200
+    bishop_max_count = max(m, n) // 3
+
     def is_valid_board(board):
         for i in range(m):
             for j in range(n):
@@ -61,13 +75,19 @@ def find_most_bishops_and_knights_simulated_annealing(m, n, max_steps=100000, al
             for j in range(n):
                 if board[i][j] == '.' and attack_cnt[i][j] == 0:
                     safe_count += 1
-        return - 0.1 * num_bishops - 2 * num_knights + alpha * conflict + beta * safe_count
+        return -num_knights + alpha * conflict + beta * safe_count
 
     # 隨機產生初始解
     board = [['.']*n for _ in range(m)]
+    for _ in range(bishop_max_count):
+        i, j = random.randint(0, m-1), random.randint(0, n-1)
+        while board[i][j] != '.':
+            i, j = random.randint(0, m-1), random.randint(0, n-1)
+        board[i][j] = 'B'
     for _ in range(random.randint(0, m*n)):
         i, j = random.randint(0, m-1), random.randint(0, n-1)
-        board[i][j] = random.choice(['B', 'K'])
+        if board[i][j] == '.':
+            board[i][j] = 'K'
     attack_cnt = init_attack_cnt(board)
     curr_cost = cost(board, attack_cnt)
     best = [r[:] for r in board]
@@ -80,13 +100,13 @@ def find_most_bishops_and_knights_simulated_annealing(m, n, max_steps=100000, al
         # 先找出有衝突的棋子
         conflict_bishops = [(i, j) for i in range(m) for j in range(n) if board[i][j] == 'B' and attack_cnt[i][j] > 0]
         conflict_knights = [(i, j) for i in range(m) for j in range(n) if board[i][j] == 'K' and attack_cnt[i][j] > 0]
-        safes = [(i, j) for i in range(m) for j in range(n) if board[i][j] == '.' and attack_cnt[i][j] == 0]
+        empties = [(i, j) for i in range(m) for j in range(n) if board[i][j] == '.']
 
 
         # 1. 新增：隨機選一個空格，隨機放 B 或 K
-        if safes:
-            i, j = random.choice(safes)
-            piece = random.choice(['B', 'K'])
+        if empties:
+            i, j = random.choice(empties)
+            piece = random.choice(['K'])
             new_board = [r[:] for r in board]
             new_attack_cnt = [row[:] for row in attack_cnt]
             new_board[i][j] = piece
@@ -94,9 +114,8 @@ def find_most_bishops_and_knights_simulated_annealing(m, n, max_steps=100000, al
             neighbors.append((new_board, new_attack_cnt))
 
         # 2. 刪除：隨機選一個有衝突的棋子刪除
-        conflict_all = conflict_bishops + conflict_knights
-        if conflict_all:
-            i, j = random.choice(conflict_all)
+        if conflict_knights:
+            i, j = random.choice(conflict_knights)
             piece = board[i][j]
             new_board = [r[:] for r in board]
             new_attack_cnt = [row[:] for row in attack_cnt]
@@ -105,9 +124,10 @@ def find_most_bishops_and_knights_simulated_annealing(m, n, max_steps=100000, al
             neighbors.append((new_board, new_attack_cnt))
 
         # 3. 移動：隨機選一個有衝突的棋子，移動到隨機空格
-        if conflict_all and safes:
+        conflict_all = conflict_bishops + conflict_knights
+        if conflict_all and empties:
             from_i, from_j = random.choice(conflict_all)
-            to_i, to_j = random.choice(safes)
+            to_i, to_j = random.choice(empties)
             if (from_i, from_j) != (to_i, to_j):
                 piece = board[from_i][from_j]
                 new_board = [r[:] for r in board]
@@ -128,19 +148,20 @@ def find_most_bishops_and_knights_simulated_annealing(m, n, max_steps=100000, al
         delta = new_cost - curr_cost
         if delta < 0 or random.random() < math.exp(-delta / (temp + 1e-9)):
             board = [r[:] for r in new_board]
-            attack_cnt = [row[:] for row in new_attack_cnt]
+            attack_cnt = [r[:] for r in new_attack_cnt]
             curr_cost = new_cost
             if curr_cost < best_cost:
                 best_cost = curr_cost
                 best = [r[:] for r in board]
         temp *= cooling_rate
-        print(f"Step {step+1}, Best Cost: {best_cost}, Save Count: {sum(row.count(0) for row in attack_cnt)}, Temperature: {temp:.4f}")
-        # print(f"Current Board:")
+        bishop_cnt = sum(row.count('B') for row in board)
+        knight_cnt = sum(row.count('K') for row in board)
+        save_cnt = sum(row.count(0) for row in attack_cnt)
+        # print(f"Step {step+1}, Best Cost: {best_cost}, Bishop: {bishop_cnt}, Knight: {knight_cnt}, Save: {save_cnt - bishop_cnt - knight_cnt}, Temp: {temp:.4f}, delta: {delta}, AcceptProb: {math.exp(-delta / (temp + 1e-9))}")
         # for row in board:
-        #     print(*row)
+        #     print(' '.join(row))
+        # print()
         if temp < end_temp:
             if is_valid_board(best):
                 break
-            else:
-                temp = start_temp  # Reset temperature if no valid board found
     return best
