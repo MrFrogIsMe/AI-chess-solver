@@ -92,7 +92,7 @@ def find_most_bishops_and_knights_with_queens_simulated_annealing(
 
     # bishop_max_count = max(m, n) // 3
     bishop_max_count = sum(cell == '.' for row in board for cell in row) // min(m, n)
-    print("bishop_max_count = ", bishop_max_count)
+    # print("bishop_max_count = ", bishop_max_count)
     # random place knights and bishops
     for _ in range(bishop_max_count):
         i, j = random.randint(0, m-1), random.randint(0, n-1)
@@ -119,7 +119,7 @@ def find_most_bishops_and_knights_with_queens_simulated_annealing(
         conflict_knights = [(i, j) for i in range(m) for j in range(n) if board[i][j] == 'K' and attack_cnt[i][j] > 0]
         empties = [(i, j) for i in range(m) for j in range(n) if board[i][j] == '.']
 
-        # 1. 新增：隨機選一個空格，隨機放 B 或 K
+        # 1. 新增：隨機選一個空格，隨機放 K
         if empties:
             i, j = random.choice(empties)
             piece = random.choice(['K'])
@@ -128,7 +128,7 @@ def find_most_bishops_and_knights_with_queens_simulated_annealing(
             new_board[i][j] = piece
             update_attack_cnt(new_attack_cnt, i, j, 1, piece)
             neighbors.append((new_board, new_attack_cnt))
-         # 2. 刪除：隨機選一個有衝突的棋子刪除
+        # 2. 刪除：隨機選一個有衝突的棋子刪除
         if conflict_knights:
             i, j = random.choice(conflict_knights)
             piece = board[i][j]

@@ -1,10 +1,11 @@
 from sys import argv
-from task5 import findMostBishopsAndKnightswithQueens
+from task5 import find_most_bishops_and_knights_with_queens
 print(argv)
 
 if __name__ == "__main__":
     task = 0
     m, n = 0, 0
+    QueensPos = []
     if len(argv) > 1:
         task = int(argv[1].strip(','))
         m, n = int(argv[2].strip(',')), int(argv[3].strip(','))
@@ -20,8 +21,8 @@ if __name__ == "__main__":
             if task == 5 and len(lines) > 3:
                 queens_str = ','.join(lines[3:]).strip()
                 QueensPos = eval(queens_str)
+                if QueensPos == '': QueensPos = []
     print(task, m, n)
-    print(QueensPos)
     match(task):
         # Task 1: Find most Queens
         case 1:
@@ -37,7 +38,7 @@ if __name__ == "__main__":
             pass
         # Task 5: Find most Bishops and Knights with a given Queens
         case 5:
-            findMostBishopsAndKnightswithQueens(m, n, QueensPos)
+            find_most_bishops_and_knights_with_queens(m, n, QueensPos)
             pass
         case _:
             raise ValueError("Invalid task number")
