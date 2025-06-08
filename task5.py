@@ -5,10 +5,6 @@ from task5_simulated_annealing import find_most_bishops_and_knights_with_queens_
 def find_most_bishops_and_knights_with_queens(m, n, QueensPos):
     # board, count_bishops, count_knights = find_most_bishops_and_knights_with_queens_observation(m, n, QueensPos)
     # board, count_bishops, count_knights = find_most_bishops_and_knights_with_queens_hill_climbing(m, n, QueensPos)
-    board, count_bishops, count_knights = find_most_bishops_and_knights_with_queens_simulated_annealing(m, n, QueensPos)
-    # for row in board:
-    #     print(*row)
-    # print("number of bishops:", count_bishops)
-    # print("number of knights:", count_knights)
+    board = find_most_bishops_and_knights_with_queens_simulated_annealing(m, n, QueensPos)
     return board
 find_most_bishops_and_knights_with_queens(10, 10, [(0, 0), (3, 1)])
