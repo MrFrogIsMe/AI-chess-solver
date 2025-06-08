@@ -54,11 +54,11 @@ if __name__ == "__main__":
             board = find_most_queens(m, n)
             print_result(board)
         case 2:
-            board, count = find_most_bishops(m, n)
+            board = find_most_bishops(m, n)
             print_result(board)
         # Task 3: Find most Knights
         case 3:
-            board, knights = find_most_knights(m, n)
+            board = find_most_knights(m, n)
             print_result(board)
         # Task 4: Find most Bishops and Knights
         case 4:
