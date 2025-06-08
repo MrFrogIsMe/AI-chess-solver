@@ -8,6 +8,17 @@ def print_board(board):
     queens = sum(row.count('Q') for row in board)
     print(f"Bishops: {bishops}, Knights: {knights}, Queens: {queens}")
 
+def print_result(board):
+    bishops_positions = [(i, j) for i in range(len(board)) for j in range(len(board[0])) if board[i][j] == 'B']
+    knights_positions = [(i, j) for i in range(len(board)) for j in range(len(board[0])) if board[i][j] == 'K']
+    queens_positions = [(i, j) for i in range(len(board)) for j in range(len(board[0])) if board[i][j] == 'Q']
+    if bishops_positions:
+        print("Bishops positions:", bishops_positions)
+    if knights_positions:
+        print("Knights positions:", knights_positions)
+    if queens_positions:
+        print("Queens positions:", queens_positions)
+
 if __name__ == "__main__":
     task = 0
     m, n = 0, 0
