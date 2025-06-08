@@ -39,12 +39,6 @@ if __name__ == "__main__":
         if task == 5 and len(argv) > 4:
             queens_str = ' '.join(argv[4:])
             QueensPos = eval(queens_str)
-    else: 
-        with open('input.txt', 'r') as f:
-            lines = f.readline().strip().split(',')
-            # print(lines)
-            task = int(lines[0])
-            m, n = int(lines[1]), int(lines[2])
     # print(task, m, n)
     if m <= 0 or n <= 0 :
         raise ValueError("Invalid input")
