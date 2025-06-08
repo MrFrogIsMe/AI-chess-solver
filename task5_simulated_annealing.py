@@ -96,8 +96,9 @@ def find_most_bishops_and_knights_with_queens_simulated_annealing(
     # random place knights and bishops
     for _ in range(bishop_max_count):
         i, j = random.randint(0, m-1), random.randint(0, n-1)
-        while board[i][j] == 'Q' or board[i][j] == 'X': 
-            i, j = random.randint(0, m-1), random.randint(0, n-1)
+        if board[i][j] == 'Q' or board[i][j] == 'X': continue
+        # while board[i][j] == 'Q' or board[i][j] == 'X':
+            # i, j = random.randint(0, m-1), random.randint(0, n-1),
         board[i][j] = 'B'
     for _ in range(random.randint(0, m*n//2)):
         i, j = random.randint(0, m-1), random.randint(0, n-1)
@@ -172,9 +173,15 @@ def find_most_bishops_and_knights_with_queens_simulated_annealing(
         bishop_cnt = sum(row.count('B') for row in board)
         knight_cnt = sum(row.count('K') for row in board)
         save_cnt = sum(row.count(0) for row in attack_cnt)
-        # print(f"Step {step+1}, Best Cost: {best_cost}, Bishop: {bishop_cnt}, Knight: {knight_cnt}, Save: {save_cnt - bishop_cnt - knight_cnt}, Temp: {temp:.4f}, delta: {delta}, AcceptProb: {math.exp(-delta / (temp + 1e-9))}")
+        print(f"Step {step+1}, Best Cost: {best_cost}, Bishop: {bishop_cnt}, Knight: {knight_cnt}, Save: {save_cnt - bishop_cnt - knight_cnt}, Temp: {temp:.4f}, delta: {delta}, AcceptProb: {math.exp(-delta / (temp + 1e-9))}")
         if temp < end_temp:
             if is_valid_board(best):
                 # print("Valid Board Found")
-                break
+                return best
+            
+    if not is_valid_board(best):
+        conflict = [(i, j) for i in range(m) for j in range(n) if (best[i][j] == 'B' or best[i][j] == 'K') and attack_cnt[i][j] > 0]
+        for i, j in conflict:
+            print(f"Conflict at ({i}, {j})")
+            best[i][j] = '.'
     return best

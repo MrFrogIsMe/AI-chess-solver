@@ -137,7 +137,13 @@ def find_most_queens_simulated_annealing(
         # print(f"Step: {step}, Temp: {temp}, Bishop Count: {bishop_cnt}, Save Count: {save_cnt}")
         if temp < end_temp:
             if is_valid_board(best):
+                return best
                 # print("Valid Board Found")
                 # print("num of queens: ", sum(row.count('Q') for row in best))
-                break
+                # break
+    
+    if not is_valid_board(best):
+        conflict_queens = [(i, j) for i in range(m) for j in range(n) if best[i][j] == 'Q' and attack_cnt[i][j] > 0]
+        for i, j in conflict_queens:
+            best[i][j] = '.'
     return best

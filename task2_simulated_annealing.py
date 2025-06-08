@@ -143,5 +143,9 @@ def find_most_bishops_simulated_annealing(
             if is_valid_board(best):
                 # print("Valid Board Found")
                 # print("sum of bishops: ", sum(row.count('B') for row in best)) 
-                break
+                return best
+    if not is_valid_board(best):
+        conflict_bishops = [(i, j) for i in range(m) for j in range(n) if best[i][j] == 'B' and attack_cnt[i][j] > 0]
+        for i, j in conflict_bishops:
+            best[i][j] = '.'
     return best
