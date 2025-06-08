@@ -21,6 +21,7 @@ def find_most_bishops_and_knights_simulated_annealing(
         cooling_rate = 0.9995 if m * n > 100 else 0.999
     if max_steps is None:
         max_steps = m * n * 200
+    bishop_max_count = max(m, n) // 3
 
     def is_valid_board(board):
         for i in range(m):
@@ -77,13 +78,19 @@ def find_most_bishops_and_knights_simulated_annealing(
             for j in range(n):
                 if board[i][j] == '.' and attack_cnt[i][j] == 0:
                     safe_count += 1
-        return -num_bishops - num_knights + alpha * conflict + beta * safe_count
+        return -num_knights + alpha * conflict + beta * safe_count
 
     # 隨機產生初始解
     board = [['.']*n for _ in range(m)]
+    for _ in range(bishop_max_count):
+        i, j = random.randint(0, m-1), random.randint(0, n-1)
+        while board[i][j] != '.':
+            i, j = random.randint(0, m-1), random.randint(0, n-1)
+        board[i][j] = 'B'
     for _ in range(random.randint(0, m*n)):
         i, j = random.randint(0, m-1), random.randint(0, n-1)
-        board[i][j] = random.choice(['B', 'K'])
+        if board[i][j] == '.':
+            board[i][j] = 'K'
     attack_cnt = init_attack_cnt(board)
     curr_cost = cost(board, attack_cnt)
     best = [r[:] for r in board]
@@ -110,9 +117,8 @@ def find_most_bishops_and_knights_simulated_annealing(
             neighbors.append((new_board, new_attack_cnt))
 
         # 2. 刪除：隨機選一個有衝突的棋子刪除
-        conflict_all = conflict_bishops + conflict_knights
-        if conflict_all:
-            i, j = random.choice(conflict_all)
+        if conflict_knights:
+            i, j = random.choice(conflict_knights)
             piece = board[i][j]
             new_board = [r[:] for r in board]
             new_attack_cnt = [row[:] for row in attack_cnt]
@@ -121,6 +127,7 @@ def find_most_bishops_and_knights_simulated_annealing(
             neighbors.append((new_board, new_attack_cnt))
 
         # 3. 移動：隨機選一個有衝突的棋子，移動到隨機空格
+        conflict_all = conflict_bishops + conflict_knights
         if conflict_all and empties:
             from_i, from_j = random.choice(conflict_all)
             to_i, to_j = random.choice(empties)
