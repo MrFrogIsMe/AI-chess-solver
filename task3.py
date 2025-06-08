@@ -1,4 +1,4 @@
-def findmostKnights(m, n):
+def rule_based(m, n):
     board = [[0]*n for _ in range(m)]
     if m == 1:
         for i in range (n): board[0][i] = 1
@@ -19,6 +19,8 @@ def findmostKnights(m, n):
             start_col = 0 if i % 2 == 0 else 1
             for j in range (start_col, n, 2):
                 board[i][j] = 1
-    # for i in range (m): print(board[i])
     return board
-# findmostKnights(9, 2)
+def find_most_knights(m, n):
+    board = rule_based(m, n)
+    knights = [(j, i) for j in range(n) for i in range(m) if board[i][j] == 'K']
+    return board, knights
