@@ -2,7 +2,7 @@ import random
 
 bishop_moves = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
 
-def findmostBishops(m, n):
+def find_most_bishops(m, n):
     return find_most_bishops_hill_climbing(m, n)
 
 def find_most_bishops_hill_climbing(
