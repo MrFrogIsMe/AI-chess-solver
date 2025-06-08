@@ -33,13 +33,8 @@ if __name__ == "__main__":
             pass
         # Task 2: Find most Bishops
         case 2:
-<<<<<<< HEAD
-            board, count = findmostBishops(m, n)
+            board, count = find_most_bishops(m, n)
             printboard(board, count)
-=======
-            board = find_most_bishops(m, n)
-            printboard(board)
->>>>>>> task2-hill-climbing
             pass
         # Task 3: Find most Knights
         case 3:
