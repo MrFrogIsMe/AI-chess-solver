@@ -1,6 +1,6 @@
 from sys import argv
 import task2
-from team0 import printboard
+from team1 import printboard
 import time
 
 # calculate the average number of bishops placed on the board
