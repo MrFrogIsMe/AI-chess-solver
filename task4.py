@@ -5,7 +5,7 @@ bishop_moves = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
 knight_moves = [(-1, -2), (-1, 2), (1, -2), (1, 2), (-2, -1), (-2, 1), (2, -1), (2, 1)]
 
 def find_most_bishops_and_knights(m, n):
-    return find_most_bishops_and_knights_simulated_annealing(m, n, alpha=10, beta=1, cooling_rate=0.999)
+    return find_most_bishops_and_knights_simulated_annealing(m, n, alpha=10, beta=10, cooling_rate=0.999)
 
 def find_most_bishops_and_knights_simulated_annealing(
     m, n,
@@ -161,6 +161,9 @@ def find_most_bishops_and_knights_simulated_annealing(
         knight_cnt = sum(row.count('K') for row in board)
         save_cnt = sum(row.count(0) for row in attack_cnt)
         print(f"Step {step+1}, Best Cost: {best_cost}, Bishop: {bishop_cnt}, Knight: {knight_cnt}, Save: {save_cnt - bishop_cnt - knight_cnt}, Temp: {temp:.4f}, delta: {delta}, AcceptProb: {math.exp(-delta / (temp + 1e-9))}")
+        for row in board:
+            print(' '.join(row))
+        print()
         if temp < end_temp:
             if is_valid_board(best):
                 break
