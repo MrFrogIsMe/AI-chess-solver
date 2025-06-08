@@ -4,7 +4,7 @@ from task4 import findMostBishopsAndKnights
 print(argv)
 def printboard(board):
     for row in board:
-        print(row)
+        print(*row)
 
 if __name__ == "__main__":
     task = 0
