@@ -173,7 +173,7 @@ def find_most_bishops_and_knights_with_queens_simulated_annealing(
         bishop_cnt = sum(row.count('B') for row in board)
         knight_cnt = sum(row.count('K') for row in board)
         save_cnt = sum(row.count(0) for row in attack_cnt)
-        print(f"Step {step+1}, Best Cost: {best_cost}, Bishop: {bishop_cnt}, Knight: {knight_cnt}, Save: {save_cnt - bishop_cnt - knight_cnt}, Temp: {temp:.4f}, delta: {delta}, AcceptProb: {math.exp(-delta / (temp + 1e-9))}")
+        # print(f"Step {step+1}, Best Cost: {best_cost}, Bishop: {bishop_cnt}, Knight: {knight_cnt}, Save: {save_cnt - bishop_cnt - knight_cnt}, Temp: {temp:.4f}, delta: {delta}, AcceptProb: {math.exp(-delta / (temp + 1e-9))}")
         if temp < end_temp:
             if is_valid_board(best):
                 # print("Valid Board Found")

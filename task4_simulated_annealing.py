@@ -161,7 +161,7 @@ def find_most_bishops_and_knights_simulated_annealing(
         bishop_cnt = sum(row.count('B') for row in board)
         knight_cnt = sum(row.count('K') for row in board)
         save_cnt = sum(row.count(0) for row in attack_cnt)
-        print(f"Step {step+1}, Best Cost: {best_cost}, Bishop: {bishop_cnt}, Knight: {knight_cnt}, conflict_bishops {len(conflict_bishops)}, conflict_knights {len(conflict_knights)}, empties {len(empties)}, Temp: {temp:.4f}, delta: {delta}")
+        # print(f"Step {step+1}, Best Cost: {best_cost}, Bishop: {bishop_cnt}, Knight: {knight_cnt}, conflict_bishops {len(conflict_bishops)}, conflict_knights {len(conflict_knights)}, empties {len(empties)}, Temp: {temp:.4f}, delta: {delta}")
         # for row in board:
         #     print(' '.join(row))
         # print()

@@ -18,13 +18,13 @@ def print_result(board):
     knights_positions = [(i, j) for i in range(len(board)) for j in range(len(board[0])) if board[i][j] == 'K']
     queens_positions = [(i, j) for i in range(len(board)) for j in range(len(board[0])) if board[i][j] == 'Q']
     if bishops_positions:
-        print("Bishops positions:", bishops_positions)
+        print("bishops:", bishops_positions)
     if knights_positions:
-        print("Knights positions:", knights_positions)
+        print("knights:", knights_positions)
     if queens_positions:
-        print("Queens positions:", queens_positions)
+        print("queens:", queens_positions)
 
-print(argv)
+# print(argv)
 def printboard(board):
     for row in board:
         print(row)
@@ -42,10 +42,10 @@ if __name__ == "__main__":
     else: 
         with open('input.txt', 'r') as f:
             lines = f.readline().strip().split(',')
-            print(lines)
+            # print(lines)
             task = int(lines[0])
             m, n = int(lines[1]), int(lines[2])
-    print(task, m, n)
+    # print(task, m, n)
     if m <= 0 or n <= 0 :
         raise ValueError("Invalid input")
     match(task):
@@ -66,7 +66,7 @@ if __name__ == "__main__":
             print_result(board)
         # Task 5: Find most Bishops and Knights with a given Queens
         case 5:
-            # 輸入 Queens Postion 時請記得加上雙引號
+            # !! 輸入 Queens Postion 時請記得加上雙引號 !! 
             board, bishops, knights = find_most_bishops_and_knights_with_queens(m, n, QueensPos)
             print_result(board)
         case _:
