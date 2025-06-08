@@ -62,7 +62,7 @@ def find_most_bishops_and_knights_with_queens_observation(m, n, QueensPos):
         for d in range(1, max(m, n)):
             for dr, dc in [(-d, -d), (-d, d), (d, -d), (d, d)]:
                 r, c = qr + dr, qc + dc
-                if 0 <= r < m and 0 <= c < n: board[r][c] = 'X'
+                if 0 <= r < m and 0 <= c < n and board[r][c] == '.': board[r][c] = 'X'
     # determine which diagonal can put more knights
     NmainDiagonal = NantiDiagonal = 0
     for i in range(m):

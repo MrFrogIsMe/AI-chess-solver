@@ -1,6 +1,6 @@
 from sys import argv
 from task5 import find_most_bishops_and_knights_with_queens
-print(argv)
+# print(argv)
 
 if __name__ == "__main__":
     task = 0
@@ -15,14 +15,15 @@ if __name__ == "__main__":
     else: 
         with open('input.txt', 'r') as f:
             lines = f.readline().strip().split(',')
-            print(lines)
+            # print(lines)
             task = int(lines[0])
             m, n = int(lines[1]), int(lines[2])
             if task == 5 and len(lines) > 3:
                 queens_str = ','.join(lines[3:]).strip()
                 QueensPos = eval(queens_str)
                 if QueensPos == '': QueensPos = []
-    print(task, m, n)
+    
+    # print(task, m, n)
     match(task):
         # Task 1: Find most Queens
         case 1:
@@ -38,7 +39,10 @@ if __name__ == "__main__":
             pass
         # Task 5: Find most Bishops and Knights with a given Queens
         case 5:
-            find_most_bishops_and_knights_with_queens(m, n, QueensPos)
+            # 輸入 Queens Postion 時請記得加上雙引號
+            board, bishops, knights = find_most_bishops_and_knights_with_queens(m, n, QueensPos)
+            print("bishops:", bishops)
+            print("knights:", knights)
             pass
         case _:
             raise ValueError("Invalid task number")
