@@ -17,8 +17,9 @@ def find_most_bishops_and_knights_simulated_annealing(
     if cooling_rate is None:
         cooling_rate = 0.9995 if m * n > 100 else 0.999
     if max_steps is None:
-        max_steps = m * n * 200
-    bishop_max_count = max(m, n) // 3
+        max_steps = m * n * 300
+    # bishop_max_count = max(m, n) // 3
+    bishop_max_count = min(m, n) // 3
 
     def is_valid_board(board):
         for i in range(m):
@@ -75,7 +76,7 @@ def find_most_bishops_and_knights_simulated_annealing(
             for j in range(n):
                 if board[i][j] == '.' and attack_cnt[i][j] == 0:
                     safe_count += 1
-        return -num_knights + alpha * conflict + beta * safe_count
+        return -num_bishops-num_knights + alpha * conflict + beta * safe_count
 
     # 隨機產生初始解
     board = [['.']*n for _ in range(m)]
@@ -153,15 +154,18 @@ def find_most_bishops_and_knights_simulated_annealing(
             if curr_cost < best_cost:
                 best_cost = curr_cost
                 best = [r[:] for r in board]
-        temp *= cooling_rate
+        # temp *= cooling_rate
+        # temp = max(temp * cooling_rate, 1e-9)
+        temp = min(temp * cooling_rate, end_temp)
         # bishop_cnt = sum(row.count('B') for row in board)
         # knight_cnt = sum(row.count('K') for row in board)
         # save_cnt = sum(row.count(0) for row in attack_cnt)
-        # print(f"Step {step+1}, Best Cost: {best_cost}, Bishop: {bishop_cnt}, Knight: {knight_cnt}, Save: {save_cnt - bishop_cnt - knight_cnt}, Temp: {temp:.4f}, delta: {delta}, AcceptProb: {math.exp(-delta / (temp + 1e-9))}")
+        # print(f"Step {step+1}, Best Cost: {best_cost}, Bishop: {bishop_cnt}, Knight: {knight_cnt}, Save: {save_cnt - bishop_cnt - knight_cnt}, Temp: {temp:.4f}, delta: {delta}")
         # for row in board:
         #     print(' '.join(row))
         # print()
-        if temp < end_temp:
+        if temp <= end_temp:
             if is_valid_board(best):
+                # print("Valid Board Found")
                 break
     return best
