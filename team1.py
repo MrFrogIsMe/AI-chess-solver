@@ -1,4 +1,6 @@
 from sys import argv
+from task1 import find_most_queens
+from task2 import find_most_bishops
 
 def print_board(board):
     for row in board:
@@ -28,14 +30,22 @@ if __name__ == "__main__":
     else: 
         with open('input.txt', 'r') as f:
             lines = f.readline().strip().split(',')
+            print(lines)
             task = int(lines[0])
             m, n = int(lines[1]), int(lines[2])
+    print(task, m, n)
+    if m <= 0 or n <= 0 :
+        raise ValueError("Invalid input")
     match(task):
         # Task 1: Find most Queens
         case 1:
+            board = find_most_queens(m, n)
+            print_result(board)
             pass
         # Task 2: Find most Bishops
         case 2:
+            board, count = find_most_bishops(m, n)
+            print_result(board)
             pass
         # Task 3: Find most Knights
         case 3:
