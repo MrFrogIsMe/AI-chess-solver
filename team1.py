@@ -1,6 +1,7 @@
 from sys import argv
 from task1 import find_most_queens
 from task2 import find_most_bishops
+from task3 import find_most_knights
 
 def print_board(board):
     for row in board:
@@ -20,6 +21,11 @@ def print_result(board):
         print("Knights positions:", knights_positions)
     if queens_positions:
         print("Queens positions:", queens_positions)
+
+print(argv)
+def printboard(board):
+    for row in board:
+        print(row)
 
 if __name__ == "__main__":
     task = 0
@@ -49,6 +55,8 @@ if __name__ == "__main__":
             pass
         # Task 3: Find most Knights
         case 3:
+            board, knights = find_most_knights(m, n)
+            print_result(board)
             pass
         # Task 4: Find most Bishops and Knights
         case 4:
